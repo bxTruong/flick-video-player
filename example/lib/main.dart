@@ -99,11 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             FlickVideoPlayer(
                 flickManager: FlickManager(
-                  videoPlayerController:
-                  VideoPlayerController.network("https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-
-                )
-            ),
+                    videoPlayerController: VideoPlayerController.network(
+                        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
+                 )),
           ],
         ),
       ),
@@ -114,4 +112,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
 }

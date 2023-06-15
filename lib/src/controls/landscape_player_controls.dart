@@ -1,8 +1,10 @@
-
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
+import '../sheet/setting_sheet.dart';
 import 'play_toggle.dart';
 
 class LandscapePlayerControls extends StatelessWidget {
@@ -14,6 +16,8 @@ class LandscapePlayerControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlickVideoManager flickVideoManager =
+        Provider.of<FlickVideoManager>(context);
     return FlickShowControlsAction(
       child: FlickAutoHideChild(
         child: Stack(
@@ -51,7 +55,8 @@ class LandscapePlayerControls extends StatelessWidget {
                         Expanded(
                           child: Container(
                             child: FlickVideoProgressBar(
-                              flickProgressBarSettings: FlickProgressBarSettings(
+                              flickProgressBarSettings:
+                                  FlickProgressBarSettings(
                                 height: 10,
                                 handleRadius: 10,
                                 padding: EdgeInsets.symmetric(
@@ -95,7 +100,8 @@ class LandscapePlayerControls extends StatelessWidget {
                                       radius: 0.4,
                                     ).createShader(
                                       Rect.fromCircle(
-                                        center: Offset(playedPart!, height! / 2),
+                                        center:
+                                            Offset(playedPart!, height! / 2),
                                         radius: handleRadius!,
                                       ),
                                     );
@@ -103,6 +109,9 @@ class LandscapePlayerControls extends StatelessWidget {
                               ),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          width: 10,
                         ),
                         FlickTotalDuration(
                           fontSize: fontSize,
@@ -123,9 +132,7 @@ class LandscapePlayerControls extends StatelessWidget {
               right: 20,
               top: 10,
               child: GestureDetector(
-                onTap: () {
-
-                },
+                onTap: () => onPressSetting(context, flickVideoManager),
                 child: Icon(
                   Icons.more_horiz,
                   size: 30,
@@ -136,5 +143,13 @@ class LandscapePlayerControls extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onPressSetting(
+      BuildContext context, FlickVideoManager flickVideoManager) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) =>
+            SettingSheet(featureList: flickVideoManager.featureList));
   }
 }

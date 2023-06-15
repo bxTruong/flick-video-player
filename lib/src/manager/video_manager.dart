@@ -6,11 +6,29 @@ typedef TimerCancelCallback(bool playNext);
 ///
 /// Responsible to maintain life-cycle of [VideoPlayerController].
 class FlickVideoManager extends ChangeNotifier {
-  FlickVideoManager(
-      {required FlickManager flickManager,
-      required this.autoPlay,
-      required this.autoInitialize})
-      : _flickManager = flickManager;
+  FlickVideoManager({
+    required FlickManager flickManager,
+    required this.autoPlay,
+    required this.autoInitialize,
+  }) : _flickManager = flickManager {
+    featureList = [
+      FeatureModel(
+          icon: Icons.speed,
+          name: 'Playback speed',
+          featureType: FeatureType.speed,
+          onPressFeature: _onPressFeatureSpeed),
+      FeatureModel(
+          icon: Icons.hd_outlined,
+          name: 'Quality',
+          featureType: FeatureType.quality,
+          onPressFeature: _onPressQuality),
+      FeatureModel(
+          icon: Icons.clear,
+          name: 'Cancel',
+          featureType: FeatureType.cancel,
+          onPressFeature: _onPressCancel),
+    ];
+  }
 
   final FlickManager _flickManager;
   bool _currentVideoEnded = false;
@@ -22,6 +40,7 @@ class FlickVideoManager extends ChangeNotifier {
   VideoPlayerValue? _videoPlayerValue;
   VideoPlayerController? _videoPlayerController;
   bool _mounted = true;
+  List<FeatureModel> featureList = [];
 
   /// Auto-play the video after initialization.
   final bool autoPlay;
@@ -59,6 +78,7 @@ class FlickVideoManager extends ChangeNotifier {
   /// Is current video initialized.
   bool get isVideoInitialized =>
       videoPlayerController?.value.isInitialized ?? false;
+
   bool get isPlaying => videoPlayerController?.value.isPlaying ?? false;
 
   /// Cancel the current auto player timer with option of playing the next video directly.
@@ -210,5 +230,14 @@ class FlickVideoManager extends ChangeNotifier {
     _videoPlayerController?.dispose();
 
     super.dispose();
+  }
+
+  void _onPressFeatureSpeed() {}
+
+  void _onPressQuality() {}
+
+  void _onPressCancel() {
+    if (_flickManager.context == null) return;
+    Navigator.pop(_flickManager.context!);
   }
 }

@@ -4,30 +4,39 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
+import '../model/feature_model.dart';
+
 part 'video_manager.dart';
+
 part 'control_manager.dart';
+
 part 'display_manager.dart';
+
 part 'client_channels.dart';
 
 /// Manages [VideoPlayerController] and operations on it.
 class FlickManager {
-  FlickManager({
-    this.onVideoEnd,
-    GetPlayerControlsTimeout? getPlayerControlsTimeout,
-    required VideoPlayerController videoPlayerController,
+  FlickManager(
+      {this.onVideoEnd,
+      GetPlayerControlsTimeout? getPlayerControlsTimeout,
+      required VideoPlayerController videoPlayerController,
 
-    /// Auto initialize the video.
-    bool autoInitialize = true,
+      /// Auto initialize the video.
+      bool autoInitialize = true,
 
-    /// Auto-play video once initialized.
-    bool autoPlay = true,
-  }) : this.getPlayerControlsTimeout =
+      /// Auto-play video once initialized.
+      bool autoPlay = true,
+      })
+      : this.getPlayerControlsTimeout =
             getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
     _flickControlManager = FlickControlManager(
       flickManager: this,
     );
     _flickVideoManager = FlickVideoManager(
-        flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize);
+        flickManager: this,
+        autoPlay: autoPlay,
+        autoInitialize: autoInitialize);
     _flickDisplayManager = FlickDisplayManager(
       flickManager: this,
     );
@@ -38,6 +47,7 @@ class FlickManager {
   FlickControlManager? _flickControlManager;
   FlickDisplayManager? _flickDisplayManager;
   BuildContext? _context;
+  List<FeatureModel> featureList = [];
 
   /// Video end callback, change the video in this callback.
   Function? onVideoEnd;
@@ -50,8 +60,11 @@ class FlickManager {
   GetPlayerControlsTimeout getPlayerControlsTimeout;
 
   FlickVideoManager? get flickVideoManager => _flickVideoManager;
+
   FlickDisplayManager? get flickDisplayManager => _flickDisplayManager;
+
   FlickControlManager? get flickControlManager => _flickControlManager;
+
   BuildContext? get context => _context;
 
   registerContext(BuildContext context) {
