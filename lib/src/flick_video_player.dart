@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wakelock/wakelock.dart';
 
+import 'controls/landscape_player_controls.dart';
+
 class FlickVideoPlayer extends StatefulWidget {
   const FlickVideoPlayer({
     Key? key,
     required this.flickManager,
     this.flickVideoWithControls = const FlickVideoWithControls(
-      controls: const FlickPortraitControls(),
+      controls: const LandscapePlayerControls(),
     ),
     this.flickVideoWithControlsFullscreen,
     this.systemUIOverlay = SystemUiOverlay.values,

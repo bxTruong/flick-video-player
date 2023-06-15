@@ -8,7 +8,6 @@ class FlickDisplayManager extends ChangeNotifier {
   }) : _flickManager = flickManager {
     handleShowPlayerControls();
   }
-
   final FlickManager? _flickManager;
   bool _mounted = true;
   Timer? _showPlayerControlsTimer;

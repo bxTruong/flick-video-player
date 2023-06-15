@@ -11,17 +11,18 @@ class FlickAutoHideChild extends StatelessWidget {
     required this.child,
     this.autoHide = true,
     this.showIfVideoNotInitialized = true,
+    this.color
   }) : super(key: key);
   final Widget child;
   final bool autoHide;
+  final Color? color;
 
   /// Show the child if video is not initialized.
   final bool showIfVideoNotInitialized;
 
   @override
   Widget build(BuildContext context) {
-    FlickDisplayManager displayManager =
-        Provider.of<FlickDisplayManager>(context);
+    FlickDisplayManager displayManager = Provider.of<FlickDisplayManager>(context);
     FlickVideoManager videoManager = Provider.of<FlickVideoManager>(context);
 
     return (!videoManager.isVideoInitialized && !showIfVideoNotInitialized)
@@ -35,8 +36,12 @@ class FlickAutoHideChild extends StatelessWidget {
                     child: child,
                   );
                 },
-                child:
-                    (displayManager.showPlayerControls) ? child : Container(),
+                child: (displayManager.showPlayerControls)
+                    ?  GestureDetector(
+                        onTap: () => displayManager.handleVideoTap(),
+                        behavior: HitTestBehavior.opaque,
+                        child:  Container(color: Color.fromRGBO(0, 0, 0, 0.4), child: child))
+                    : Container(),
               )
             : child;
   }
