@@ -10,24 +10,14 @@ class FlickVideoManager extends ChangeNotifier {
     required FlickManager flickManager,
     required this.autoPlay,
     required this.autoInitialize,
+    this.additionalOptions,
   }) : _flickManager = flickManager {
-    featureList = [
-      FeatureModel(
-          icon: Icons.speed,
-          name: 'Playback speed',
-          featureType: FeatureType.speed,
-          onPressFeature: _onPressFeatureSpeed),
-      FeatureModel(
-          icon: Icons.hd_outlined,
-          name: 'Quality',
-          featureType: FeatureType.quality,
-          onPressFeature: _onPressQuality),
-      FeatureModel(
-          icon: Icons.clear,
-          name: 'Cancel',
-          featureType: FeatureType.cancel,
-          onPressFeature: _onPressCancel),
-    ];
+    if ((additionalOptions ?? []).isNotEmpty) {
+      optionList.addAll(additionalOptions!);
+    }
+    optionList.insert(0, OptionModel(icon: Icons.speed, name: 'Playback speed', onPressFeature: _onPressFeatureSpeed));
+    optionList.insert(
+        optionList.length > 1 ? optionList.length - 1 : 1, OptionModel(icon: Icons.clear, name: 'Cancel', onPressFeature: _onPressCancel));
   }
 
   final FlickManager _flickManager;
@@ -40,7 +30,8 @@ class FlickVideoManager extends ChangeNotifier {
   VideoPlayerValue? _videoPlayerValue;
   VideoPlayerController? _videoPlayerController;
   bool _mounted = true;
-  List<FeatureModel> featureList = [];
+  List<OptionModel> optionList = [];
+  List<OptionModel>? additionalOptions;
 
   /// Auto-play the video after initialization.
   final bool autoPlay;
@@ -76,8 +67,7 @@ class FlickVideoManager extends ChangeNotifier {
   bool get errorInVideo => videoPlayerController?.value.hasError ?? false;
 
   /// Is current video initialized.
-  bool get isVideoInitialized =>
-      videoPlayerController?.value.isInitialized ?? false;
+  bool get isVideoInitialized => videoPlayerController?.value.isInitialized ?? false;
 
   bool get isPlaying => videoPlayerController?.value.isPlaying ?? false;
 
@@ -101,9 +91,7 @@ class FlickVideoManager extends ChangeNotifier {
     _notify();
   }
 
-  _handleChangeVideo(VideoPlayerController newController,
-      {Duration? videoChangeDuration,
-      TimerCancelCallback? timerCancelCallback}) async {
+  _handleChangeVideo(VideoPlayerController newController, {Duration? videoChangeDuration, TimerCancelCallback? timerCancelCallback}) async {
     // If videoChangeDuration is not null, start the autoPlayTimer.
     if (videoChangeDuration != null) {
       _timerCancelCallback = timerCancelCallback;
@@ -116,8 +104,7 @@ class FlickVideoManager extends ChangeNotifier {
 
       _nextVideoAutoPlayDuration = videoChangeDuration;
 
-      _nextVideoAutoPlayTimer =
-          Timer(videoChangeDuration, _videoChangeCallback as void Function());
+      _nextVideoAutoPlayTimer = Timer(videoChangeDuration, _videoChangeCallback as void Function());
       _notify();
     } else {
       // If videoChangeDuration is null, directly change the video.
@@ -155,10 +142,8 @@ class FlickVideoManager extends ChangeNotifier {
 
     // If movie already ended, restart the movie (Happens when previously used controller is
     // used again).
-    if (videoPlayerController!.value.position ==
-        videoPlayerController!.value.duration) {
-      videoPlayerController!
-          .seekTo(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
+    if (videoPlayerController!.value.position == videoPlayerController!.value.duration) {
+      videoPlayerController!.seekTo(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
     }
 
     if (autoPlay && ModalRoute.of(_flickManager._context!)!.isCurrent) {
@@ -203,8 +188,7 @@ class FlickVideoManager extends ChangeNotifier {
     _isBuffering = !isVideoEnded &&
         !videoPlayerValue!.hasError &&
         videoPlayerController!.value.buffered.isNotEmpty == true &&
-        videoPlayerController!.value.position.inSeconds >=
-            videoPlayerController!.value.buffered[0].end.inSeconds;
+        videoPlayerController!.value.position.inSeconds >= videoPlayerController!.value.buffered[0].end.inSeconds;
 
     _notify();
   }
@@ -232,9 +216,18 @@ class FlickVideoManager extends ChangeNotifier {
     super.dispose();
   }
 
-  void _onPressFeatureSpeed() {}
-
-  void _onPressQuality() {}
+  void _onPressFeatureSpeed() {
+    if (_flickManager.context == null) return;
+    Navigator.pop(_flickManager.context!);
+    showModalBottomSheet(
+      context: _flickManager.context!,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) =>
+          SpeedSheet(speedSelected: _videoPlayerController?.value.playbackSpeed ?? 1, videoPlayerController: _videoPlayerController),
+    );
+  }
 
   void _onPressCancel() {
     if (_flickManager.context == null) return;

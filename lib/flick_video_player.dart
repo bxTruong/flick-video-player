@@ -37,5 +37,7 @@ export './src/controls/flick_portrait_controls.dart';
 export './src/controls/flick_landscape_controls.dart';
 export './src/controls/landscape_player_controls.dart';
 
+export './src/model/option_model.dart';
 
-export './src/model/feature_model.dart';
+export './src/sheet/setting_sheet.dart';
+export './src/sheet/speed_sheet.dart';

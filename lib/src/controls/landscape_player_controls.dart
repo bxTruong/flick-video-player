@@ -149,7 +149,10 @@ class LandscapePlayerControls extends StatelessWidget {
       BuildContext context, FlickVideoManager flickVideoManager) {
     showModalBottomSheet(
         context: context,
+        shape:  RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
         builder: (context) =>
-            SettingSheet(featureList: flickVideoManager.featureList));
+            SettingSheet(featureList: flickVideoManager.optionList));
   }
 }

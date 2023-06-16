@@ -1,11 +1,12 @@
 library flick_manager;
 
 import 'dart:async';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../model/feature_model.dart';
+import '../model/option_model.dart';
 
 part 'video_manager.dart';
 
@@ -17,26 +18,25 @@ part 'client_channels.dart';
 
 /// Manages [VideoPlayerController] and operations on it.
 class FlickManager {
-  FlickManager(
-      {this.onVideoEnd,
-      GetPlayerControlsTimeout? getPlayerControlsTimeout,
-      required VideoPlayerController videoPlayerController,
+  FlickManager({
+    this.onVideoEnd,
+    GetPlayerControlsTimeout? getPlayerControlsTimeout,
+    required VideoPlayerController videoPlayerController,
 
-      /// Auto initialize the video.
-      bool autoInitialize = true,
+    /// Auto initialize the video.
+    bool autoInitialize = true,
 
-      /// Auto-play video once initialized.
-      bool autoPlay = true,
-      })
-      : this.getPlayerControlsTimeout =
-            getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
+    /// Auto-play video once initialized.
+    bool autoPlay = true,
+
+    ///
+    this.additionalFeature,
+  }) : this.getPlayerControlsTimeout = getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
     _flickControlManager = FlickControlManager(
       flickManager: this,
     );
-    _flickVideoManager = FlickVideoManager(
-        flickManager: this,
-        autoPlay: autoPlay,
-        autoInitialize: autoInitialize);
+    _flickVideoManager =
+        FlickVideoManager(flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize, additionalOptions: additionalFeature);
     _flickDisplayManager = FlickDisplayManager(
       flickManager: this,
     );
@@ -47,7 +47,10 @@ class FlickManager {
   FlickControlManager? _flickControlManager;
   FlickDisplayManager? _flickDisplayManager;
   BuildContext? _context;
-  List<FeatureModel> featureList = [];
+  List<OptionModel> featureList = [];
+
+  ///
+  List<OptionModel>? additionalFeature;
 
   /// Video end callback, change the video in this callback.
   Function? onVideoEnd;
@@ -75,12 +78,8 @@ class FlickManager {
   ///
   /// Current playing video will be paused and disposed,
   /// if [videoChangeDuration] is passed video change will happen after that duration.
-  handleChangeVideo(VideoPlayerController videoPlayerController,
-      {Duration? videoChangeDuration,
-      TimerCancelCallback? timerCancelCallback}) {
-    _flickVideoManager!._handleChangeVideo(videoPlayerController,
-        videoChangeDuration: videoChangeDuration,
-        timerCancelCallback: timerCancelCallback);
+  handleChangeVideo(VideoPlayerController videoPlayerController, {Duration? videoChangeDuration, TimerCancelCallback? timerCancelCallback}) {
+    _flickVideoManager!._handleChangeVideo(videoPlayerController, videoChangeDuration: videoChangeDuration, timerCancelCallback: timerCancelCallback);
   }
 
   _handleToggleFullscreen() {
