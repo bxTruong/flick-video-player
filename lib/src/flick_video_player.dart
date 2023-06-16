@@ -1,6 +1,6 @@
-import 'package:flick_video_player/src/utils/web_key_bindings.dart';
+import 'package:flick_video_player_custom/flick_video_player_custom.dart';
+import 'package:flick_video_player_custom/src/utils/web_key_bindings.dart';
 import 'package:universal_html/html.dart';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

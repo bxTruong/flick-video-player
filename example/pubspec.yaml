@@ -32,7 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flick_video_player:
+  flick_video_player_custom:
     path: ../
 
 

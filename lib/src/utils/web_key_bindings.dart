@@ -1,4 +1,4 @@
-import 'package:flick_video_player/src/manager/flick_manager.dart';
+import 'package:flick_video_player_custom/src/manager/flick_manager.dart';
 import 'package:universal_html/html.dart';
 
 void flickDefaultWebKeyDownHandler(

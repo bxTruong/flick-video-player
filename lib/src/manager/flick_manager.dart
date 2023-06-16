@@ -1,7 +1,7 @@
 library flick_manager;
 
 import 'dart:async';
-import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flick_video_player_custom/flick_video_player_custom.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';

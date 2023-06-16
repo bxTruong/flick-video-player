@@ -1,5 +1,7 @@
 name: flick_video_player_custom
 description: Flick Video Player is a video player for flutter. The video_player plugin gives low level access for the video playback.
+repository: https://github.com/bxTruong/flick-video-player-custom
+homepage: https://github.com/bxTruong/flick-video-player-custom
 
 version: 0.5.0
 

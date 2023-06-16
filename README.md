@@ -51,7 +51,7 @@ Add the following dependencies in your pubspec.yaml file of your flutter project
 Create a `FlickManager` and pass the manager to `FlickVideoPlayer`, make sure to dispose `FlickManager` after use. 
 ```dart 
 import 'package:flutter/material.dart';
-import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flick_video_player_custom/flick_video_player.dart';
 import 'package:video_player/video_player.dart';
 
 class SamplePlayer extends StatefulWidget {
