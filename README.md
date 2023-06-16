@@ -1,6 +1,6 @@
-# Flick Video Player
+# Flick Video Player Custom
 
-Flick Video Player is a video player for flutter.
+Flick Video Player Custom is a video player for flutter, [**based on Flick Video Player.**](https://pub.dev/packages/flick_video_player)
 The [video_player](https://pub.dev/packages/video_player) plugin gives low level access for the video playback. Flick Player wraps `video_player` under the hood and provides base architecture for developers to create their own set of UI and functionalities.
 
 # Features
@@ -14,24 +14,13 @@ The [video_player](https://pub.dev/packages/video_player) plugin gives low level
 * Change playback speed.
 * Keyboard shortcuts for web.
 
+# Features Custom
+
+* Overlay opens when touching video
+* Change video speed
+* More custom menu options
+
 # Demo Mobile
-
- |                                                              ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/default_player.gif?raw=true)                                                              |                                                                ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/animation_player.gif?raw=true)                                                                |                                                           ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/feed_player.gif?raw=true)                                                           |
- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
- | Default player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/default_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/default_player) | Animation player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/animation_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/animation_player) | Feed player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/feed_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/feed_player) |
-
-
-|                                                                     ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/custom_orientation.gif?raw=true)                                                                      |                                                           ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/landscape_player.gif?raw=true) |                                                              ![](https://github.com/rohitprajapatii/assets/blob/main/short_video_player.gif)                                                              
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: 
-| Orientation player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/custom_orientation.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/custom_orientation_player)  | Landscape player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/landscape_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/landscape_player) | Short Video player <br>[Video](https://github.com/rohitprajapatii/assets/blob/main/short_video_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/short_video_player) |
-
-
-# Demo Web
-
-|                                                              ![](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/web_player.gif?raw=true)                                                              |                                                               
- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | 
- | Web player <br>[Video](https://github.com/GeekyAnts/flick-video-player-demo-videos/blob/master/demo/web_player.mp4?raw=true) <br>[Code](https://github.com/GeekyAnts/flick-video-player/tree/master/example/lib/web_video_player) | 
-
 
 
 
@@ -111,6 +100,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
 | `FlickTogglePlayAction`         | An action helper to toggle between play/pause on tap of the screen. Takes `child` as one of the arguments to nest other actions or widgets.                                                                                                                                                                                                                                                                                           |
 | `FlickToggleSoundAction`        | An action helper to toggle between mute/unmute on tap of the screen. Takes `child` as one of the arguments to nest other actions or widgets.                                                                                                                                                                                                                                                                                          |
 | `FlickSubtitleToggle`        | An action helper to toggle between display subtitle/no-subtitle on tap of the screen. Takes `child` as one of the arguments to nest other actions or widgets.                                                                                                                                                                                                                                                                                          |
+| `Flick`        | An action helper to toggle between display subtitle/no-subtitle on tap of the screen. Takes `child` as one of the arguments to nest other actions or widgets.                                                                                                                                                                                                                                                                                          |
 
 To play a list of videos you have to create your custom `DataManager`, You can find some of the implementations in /example folder.
 
