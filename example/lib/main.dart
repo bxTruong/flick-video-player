@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -30,14 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,18 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   flickManager: FlickManager(
                       videoPlayerController: VideoPlayerController.network(
                           "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-                   )),
+                      additionalFeature: [
+                    OptionModel(
+                        icon: Icons.hd, onPressFeature: () {}, name: 'Quality')
+                  ])),
               FlickVideoPlayer(
                   flickManager: FlickManager(
-                    videoPlayerController: VideoPlayerController.network(
-                        "https://vod-progressive.akamaized.net/exp=1686914012~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F3132%2F29%2F740663286%2F3417898039.mp4~hmac=011db32911d92febb64f0d1546631e79254cee456af2bf499c35077f07abd95f/vimeo-prod-skyfire-std-us/01/3132/29/740663286/3417898039.mp4"),
-                  )),
+                videoPlayerController: VideoPlayerController.network(
+                    "https://vod-progressive.akamaized.net/exp=1686914012~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F3132%2F29%2F740663286%2F3417898039.mp4~hmac=011db32911d92febb64f0d1546631e79254cee456af2bf499c35077f07abd95f/vimeo-prod-skyfire-std-us/01/3132/29/740663286/3417898039.mp4"),
+              )),
             ],
           ),
         ),
       ),
     );
   }
-
-
 }
