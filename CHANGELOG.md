@@ -84,5 +84,9 @@ fix null context
 
 fix name additionalOptions
 
+## 0.5.5
+
+fix additionalOptions
+
 
 

@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
               FlickVideoPlayer(
                   flickManager: FlickManager(
                 videoPlayerController: VideoPlayerController.network(
-                    "https://vod-progressive.akamaized.net/exp=1687141886~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F3132%2F29%2F740663286%2F3417898039.mp4~hmac=0c93ce0cc273ac50104878226579c0423a1a9a5c9d7ed8b6f965cf741e83fb3a/vimeo-prod-skyfire-std-us/01/3132/29/740663286/3417898039.mp4"),
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"),
               )),
             ],
           ),

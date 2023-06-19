@@ -16,8 +16,7 @@ class FlickVideoManager extends ChangeNotifier {
       optionList.addAll(additionalOptions!);
     }
     optionList.insert(0, OptionModel(icon: Icons.speed, name: 'Playback speed', onPressFeature: _onPressFeatureSpeed));
-    optionList.insert(
-        optionList.length > 1 ? optionList.length - 1 : 1, OptionModel(icon: Icons.clear, name: 'Cancel', onPressFeature: _onPressCancel));
+    optionList.add(OptionModel(icon: Icons.clear, name: 'Cancel', onPressFeature: _onPressCancel));
   }
 
   final FlickManager _flickManager;
