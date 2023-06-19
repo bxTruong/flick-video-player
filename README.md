@@ -50,7 +50,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
     flickManager = FlickManager(
       videoPlayerController:
           VideoPlayerController.network("url"),
-      additionalFeature: [
+      additionalOptions: [
           OptionModel(
             icon: Icons.hd, onPressFeature: () {}, name: 'Quality')
       ]

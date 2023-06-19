@@ -30,13 +30,13 @@ class FlickManager {
     bool autoPlay = true,
 
     ///
-    this.additionalFeature,
+    this.additionalOptions,
   }) : this.getPlayerControlsTimeout = getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
     _flickControlManager = FlickControlManager(
       flickManager: this,
     );
     _flickVideoManager =
-        FlickVideoManager(flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize, additionalOptions: additionalFeature);
+        FlickVideoManager(flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize, additionalOptions: additionalOptions);
     _flickDisplayManager = FlickDisplayManager(
       flickManager: this,
     );
@@ -50,7 +50,7 @@ class FlickManager {
   List<OptionModel> featureList = [];
 
   ///
-  List<OptionModel>? additionalFeature;
+  List<OptionModel>? additionalOptions;
 
   /// Video end callback, change the video in this callback.
   Function? onVideoEnd;

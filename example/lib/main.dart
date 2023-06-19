@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   flickManager: FlickManager(
                       videoPlayerController: VideoPlayerController.network(
                           "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-                      additionalFeature: [
+                      additionalOptions: [
                     OptionModel(
                         icon: Icons.hd, onPressFeature: () {}, name: 'Quality')
                   ])),
