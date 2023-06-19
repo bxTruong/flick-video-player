@@ -27,7 +27,7 @@ class LandscapePlayerControls extends StatelessWidget {
             ),
             Positioned.fill(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8,0,8,8),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -129,8 +129,11 @@ class LandscapePlayerControls extends StatelessWidget {
   }
 
   void onPressSetting(BuildContext context, FlickVideoManager flickVideoManager) {
+    print('press Settinggggggg');
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
+        useRootNavigator: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),

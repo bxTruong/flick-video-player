@@ -138,7 +138,7 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
               widget.flickVideoWithControls,
         ),
       );
-    });
+    } );
 
     Overlay.of(context)!.insert(_overlayEntry!);
   }
