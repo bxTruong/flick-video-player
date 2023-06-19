@@ -80,5 +80,9 @@ Remove dio, path_provider
 
 fix null context
 
+## 0.5.4
+
+fix name additionalOptions
+
 
 
