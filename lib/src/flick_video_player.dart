@@ -3,10 +3,9 @@ import 'package:flick_video_player_custom/src/utils/web_key_bindings.dart';
 import 'package:universal_html/html.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as materialNavigator;
 import 'package:flutter/services.dart';
 import 'package:wakelock/wakelock.dart';
-
-import 'controls/landscape_player_controls.dart';
 
 class FlickVideoPlayer extends StatefulWidget {
   const FlickVideoPlayer({
@@ -116,7 +115,7 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
     }
   }
 
-  _switchToFullscreen() {
+  _switchToFullscreen() async {
     if (widget.wakelockEnabledFullscreen) {
       /// Disable previous wakelock setting.
       Wakelock.disable();
@@ -130,17 +129,28 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
       document.documentElement?.requestFullscreen();
     }
 
-    _overlayEntry = OverlayEntry(builder: (context) {
-      return Scaffold(
-        body: FlickManagerBuilder(
-          flickManager: flickManager,
-          child: widget.flickVideoWithControlsFullscreen ??
-              widget.flickVideoWithControls,
-        ),
-      );
-    } );
+    // _overlayEntry = OverlayEntry(builder: (context) {
+    //   return Scaffold(
+    //     body: FlickManagerBuilder(
+    //       flickManager: flickManager,
+    //       child: widget.flickVideoWithControlsFullscreen ??
+    //           widget.flickVideoWithControls,
+    //     ),
+    //   );
+    // } );
+    //
+    // Overlay.of(context)!.insert(_overlayEntry!);
 
-    Overlay.of(context)!.insert(_overlayEntry!);
+    materialNavigator.Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => Scaffold(
+                  body: FlickManagerBuilder(
+                    flickManager: flickManager,
+                    child: widget.flickVideoWithControlsFullscreen ??
+                        widget.flickVideoWithControls,
+                  ),
+                )));
   }
 
   _exitFullscreen() {
