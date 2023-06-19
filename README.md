@@ -15,7 +15,11 @@ The [video_player](https://pub.dev/packages/video_player) plugin gives low level
 
 # Demo Mobile
 
+![img](assets/1.jpg)
 
+![img](assets/2.jpg)
+
+![img](assets/3.jpg)
 
 ### Installation
 Add the following dependencies in your pubspec.yaml file of your flutter project.
