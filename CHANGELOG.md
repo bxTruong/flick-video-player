@@ -76,5 +76,9 @@ Edit readme.md
 
 Remove dio, path_provider
 
+## 0.5.3
+
+fix null context
+
 
 
