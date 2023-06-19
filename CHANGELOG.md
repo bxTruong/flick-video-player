@@ -72,5 +72,9 @@ Edit slidebar interface
 
 Edit readme.md
 
+## 0.5.2
+
+Remove dio, path_provider
+
 
 
