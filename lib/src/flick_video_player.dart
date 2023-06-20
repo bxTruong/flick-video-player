@@ -12,6 +12,7 @@ class FlickVideoPlayer extends StatefulWidget {
     Key? key,
     required this.flickManager,
     this.flickVideoWithControls = const FlickVideoWithControls(
+      /// controls [LandscapePlayerControls] or [FlickPortraitControls]
       controls: const LandscapePlayerControls(),
     ),
     this.flickVideoWithControlsFullscreen,
@@ -21,10 +22,7 @@ class FlickVideoPlayer extends StatefulWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ],
-    this.preferredDeviceOrientationFullscreen = const [
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ],
+    this.preferredDeviceOrientationFullscreen = const [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
     this.wakelockEnabled = true,
     this.wakelockEnabledFullscreen = true,
     this.webKeyDownHandler = flickDefaultWebKeyDownHandler,
@@ -72,13 +70,13 @@ class FlickVideoPlayer extends StatefulWidget {
 class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
   late FlickManager flickManager;
   bool _isFullscreen = false;
-  OverlayEntry? _overlayEntry;
 
   @override
   void initState() {
     flickManager = widget.flickManager;
     flickManager.registerContext(context);
     flickManager.flickControlManager!.addListener(listener);
+
     _setSystemUIOverlays();
     _setPreferredOrientation();
 
@@ -87,8 +85,7 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
     }
 
     if (kIsWeb) {
-      document.documentElement?.onFullscreenChange
-          .listen(_webFullscreenListener);
+      document.documentElement?.onFullscreenChange.listen(_webFullscreenListener);
       document.documentElement?.onKeyDown.listen(_webKeyListener);
     }
 
@@ -109,8 +106,7 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
   void listener() async {
     if (flickManager.flickControlManager!.isFullscreen && !_isFullscreen) {
       _switchToFullscreen();
-    } else if (_isFullscreen &&
-        !flickManager.flickControlManager!.isFullscreen) {
+    } else if (_isFullscreen && !flickManager.flickControlManager!.isFullscreen) {
       _exitFullscreen();
     }
   }
@@ -129,26 +125,17 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
       document.documentElement?.requestFullscreen();
     }
 
-    // _overlayEntry = OverlayEntry(builder: (context) {
-    //   return Scaffold(
-    //     body: FlickManagerBuilder(
-    //       flickManager: flickManager,
-    //       child: widget.flickVideoWithControlsFullscreen ??
-    //           widget.flickVideoWithControls,
-    //     ),
-    //   );
-    // } );
-    //
-    // Overlay.of(context)!.insert(_overlayEntry!);
-
     materialNavigator.Navigator.push(
         context,
         PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => Scaffold(
-                  body: FlickManagerBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
+                  onWillPop: () {
+                    flickManager.flickControlManager!.exitFullscreen();
+                    return Future.value(true);
+                  },
+                  child: FlickManagerBuilder(
                     flickManager: flickManager,
-                    child: widget.flickVideoWithControlsFullscreen ??
-                        widget.flickVideoWithControls,
+                    child: widget.flickVideoWithControlsFullscreen ?? widget.flickVideoWithControls,
                   ),
                 )));
   }
@@ -166,19 +153,16 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
       document.exitFullscreen();
     }
 
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    materialNavigator.Navigator.of(context, rootNavigator: true).pop();
     _setPreferredOrientation();
     _setSystemUIOverlays();
   }
 
   _setPreferredOrientation() {
     // when aspect ratio is less than 1 , video will be played in portrait mode and orientation will not be changed.
-    var aspectRatio =
-        widget.flickManager.flickVideoManager!.videoPlayerValue!.aspectRatio;
+    var aspectRatio = widget.flickManager.flickVideoManager!.videoPlayerValue!.aspectRatio;
     if (_isFullscreen && aspectRatio >= 1) {
-      SystemChrome.setPreferredOrientations(
-          widget.preferredDeviceOrientationFullscreen);
+      SystemChrome.setPreferredOrientations(widget.preferredDeviceOrientationFullscreen);
     } else {
       SystemChrome.setPreferredOrientations(widget.preferredDeviceOrientation);
     }
@@ -186,11 +170,9 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
 
   _setSystemUIOverlays() {
     if (_isFullscreen) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-          overlays: widget.systemUIOverlayFullscreen);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: widget.systemUIOverlayFullscreen);
     } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-          overlays: widget.systemUIOverlay);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: widget.systemUIOverlay);
     }
   }
 
@@ -198,8 +180,7 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
     final isFullscreen = (window.screenTop == 0 && window.screenY == 0);
     if (isFullscreen && !flickManager.flickControlManager!.isFullscreen) {
       flickManager.flickControlManager!.enterFullscreen();
-    } else if (!isFullscreen &&
-        flickManager.flickControlManager!.isFullscreen) {
+    } else if (!isFullscreen && flickManager.flickControlManager!.isFullscreen) {
       flickManager.flickControlManager!.exitFullscreen();
     }
   }
@@ -210,18 +191,9 @@ class _FlickVideoPlayerState extends State<FlickVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        if (_overlayEntry != null) {
-          flickManager.flickControlManager!.exitFullscreen();
-          return Future.value(false);
-        }
-        return Future.value(true);
-      },
-      child: FlickManagerBuilder(
-        flickManager: flickManager,
-        child: widget.flickVideoWithControls,
-      ),
+    return FlickManagerBuilder(
+      flickManager: flickManager,
+      child: widget.flickVideoWithControls,
     );
   }
 }

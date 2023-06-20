@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../sheet/setting_sheet.dart';
 import 'play_toggle.dart';
 
 class LandscapePlayerControls extends StatelessWidget {
@@ -13,7 +12,6 @@ class LandscapePlayerControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlickVideoManager flickVideoManager = Provider.of<FlickVideoManager>(context);
     return FlickShowControlsAction(
       child: FlickAutoHideChild(
         child: Stack(
@@ -21,7 +19,7 @@ class LandscapePlayerControls extends StatelessWidget {
             FlickSeekVideoAction(
               child: Center(
                 child: FlickVideoBuffer(
-                  child: LandscapePlayToggle(),
+                  child: FlickAutoHideChild(isTransparent: true, showIfVideoNotInitialized: false, child: LandscapePlayToggle()),
                 ),
               ),
             ),
@@ -114,29 +112,11 @@ class LandscapePlayerControls extends StatelessWidget {
             Positioned(
               right: 16,
               top: 10,
-              child: GestureDetector(
-                onTap: () => onPressSetting(context, flickVideoManager),
-                child: Icon(
-                  Icons.more_horiz,
-                  size: 30,
-                ),
-              ),
+              child: const FlickBtnSetting(),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void onPressSetting(BuildContext context, FlickVideoManager flickVideoManager) {
-    print('press Settinggggggg');
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        useRootNavigator: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) => SettingSheet(featureList: flickVideoManager.optionList));
   }
 }

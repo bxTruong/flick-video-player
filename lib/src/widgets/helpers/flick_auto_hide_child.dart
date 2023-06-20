@@ -6,16 +6,19 @@ import 'package:provider/provider.dart';
 ///
 /// Hides the child with [FadeAnimation].
 class FlickAutoHideChild extends StatelessWidget {
-  const FlickAutoHideChild({
-    Key? key,
-    required this.child,
-    this.autoHide = true,
-    this.showIfVideoNotInitialized = true,
-    this.color
-  }) : super(key: key);
+  const FlickAutoHideChild(
+      {Key? key,
+      required this.child,
+      this.autoHide = true,
+      this.showIfVideoNotInitialized = true,
+      this.isTransparent = false})
+      : super(key: key);
   final Widget child;
   final bool autoHide;
-  final Color? color;
+
+  // final Color? color;
+  // final Function? onPressChild;
+  final bool isTransparent;
 
   /// Show the child if video is not initialized.
   final bool showIfVideoNotInitialized;
@@ -37,10 +40,12 @@ class FlickAutoHideChild extends StatelessWidget {
                   );
                 },
                 child: (displayManager.showPlayerControls)
-                    ?  GestureDetector(
-                        onTap: () => displayManager.handleVideoTap(),
-                        behavior: HitTestBehavior.opaque,
-                        child:  Container(color: Color.fromRGBO(0, 0, 0, 0.4), child: child))
+                    ? !isTransparent
+                        ? GestureDetector(
+                            onTap: () => displayManager.handleVideoTap(),
+                            behavior: HitTestBehavior.opaque,
+                            child: Container(color: Color.fromRGBO(0, 0, 0, 0.4), child: child))
+                        : child
                     : Container(),
               )
             : child;

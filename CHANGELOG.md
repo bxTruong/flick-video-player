@@ -78,15 +78,21 @@ Remove dio, path_provider
 
 ## 0.5.3
 
-fix null context
+Fix null context
 
 ## 0.5.4
 
-fix name additionalOptions
+Fix name additionalOptions
 
 ## 0.5.5
 
-fix additionalOptions
+Fix additionalOptions
+
+## 0.5.6
+
+Fix don't show setting when full screen
+
+Change full screen
 
 
 
