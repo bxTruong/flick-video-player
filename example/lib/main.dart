@@ -39,11 +39,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     flickManager1 = FlickManager(
-        videoPlayerController: VideoPlayerController.network("https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-        additionalOptions: [OptionModel(icon: Icons.hd, onPressFeature: () {}, name: 'Quality')]);
+        videoPlayerController: VideoPlayerController.network(
+            "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
+        additionalOptions: [
+          OptionModel(icon: Icons.hd, onPressFeature: () {}, name: 'Quality')
+        ]);
 
     flickManager2 = FlickManager(
-      videoPlayerController: VideoPlayerController.network("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"),
+      videoPlayerController: VideoPlayerController.network(
+          "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"),
     );
   }
 
