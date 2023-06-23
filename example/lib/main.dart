@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flick_video_player_custom/flick_video_player_custom.dart';
 import 'package:video_player/video_player.dart';
 
+import 'change_stream_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -42,7 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
         videoPlayerController: VideoPlayerController.network(
             "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
         additionalOptions: [
-          OptionModel(icon: Icons.hd, onPressFeature: () {}, name: 'Quality')
+          OptionModel(
+              icon: Icons.hd, onPressFeature: _onPressQuality, name: 'Quality')
         ]);
 
     flickManager2 = FlickManager(
@@ -70,20 +73,41 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlickVideoPlayer(flickManager: flickManager1),
-              FlickVideoPlayer(
-                flickManager: flickManager2,
-                flickVideoWithControls: const FlickVideoWithControls(
-                  videoFit: BoxFit.fitWidth,
-                  controls: FlickPortraitControls(),
-                ),
-                flickVideoWithControlsFullscreen: const FlickVideoWithControls(
-                  controls: FlickLandscapeControls(),
-                ),
-              ),
+              // FlickVideoPlayer(
+              //   flickManager: flickManager2,
+              //   flickVideoWithControls: const FlickVideoWithControls(
+              //     videoFit: BoxFit.fitWidth,
+              //     controls: FlickPortraitControls(),
+              //   ),
+              //   flickVideoWithControlsFullscreen: const FlickVideoWithControls(
+              //     controls: FlickLandscapeControls(),
+              //   ),
+              // ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _onPressQuality() async {
+    Navigator.pop(context);
+    Duration currentPosition = await flickManager1
+            .flickVideoManager?.videoPlayerController?.position ??
+        const Duration(milliseconds: 0);
+    Duration? totalDurationVideo =
+        flickManager1.flickVideoManager?.videoPlayerValue?.duration;
+    print('ghghghghghghghghgh $totalDurationVideo');
+    VideoPlayerController videoPlayerController = VideoPlayerController.network(
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
+
+    flickManager1.handleChangeVideo(videoPlayerController,
+        videoChangeDuration: currentPosition,
+        totalDurationVideo: totalDurationVideo,
+        videoPlayerValueQuality:  flickManager1.flickVideoManager?.videoPlayerValue,
+        isNotChangeQuality: false);
+    // await Future.delayed(Duration(milliseconds: 800));
+    // await flickManager1.flickControlManager?.seekTo(duration);
+    flickManager1.flickControlManager?.togglePlay();
   }
 }

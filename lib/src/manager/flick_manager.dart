@@ -31,12 +31,16 @@ class FlickManager {
 
     ///
     this.additionalOptions,
-  }) : this.getPlayerControlsTimeout = getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
+  }) : this.getPlayerControlsTimeout =
+            getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
     _flickControlManager = FlickControlManager(
       flickManager: this,
     );
-    _flickVideoManager =
-        FlickVideoManager(flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize, additionalOptions: additionalOptions);
+    _flickVideoManager = FlickVideoManager(
+        flickManager: this,
+        autoPlay: autoPlay,
+        autoInitialize: autoInitialize,
+        additionalOptions: additionalOptions);
     _flickDisplayManager = FlickDisplayManager(
       flickManager: this,
     );
@@ -78,8 +82,18 @@ class FlickManager {
   ///
   /// Current playing video will be paused and disposed,
   /// if [videoChangeDuration] is passed video change will happen after that duration.
-  handleChangeVideo(VideoPlayerController videoPlayerController, {Duration? videoChangeDuration, TimerCancelCallback? timerCancelCallback}) {
-    _flickVideoManager!._handleChangeVideo(videoPlayerController, videoChangeDuration: videoChangeDuration, timerCancelCallback: timerCancelCallback);
+  handleChangeVideo(VideoPlayerController videoPlayerController,
+      {Duration? videoChangeDuration,
+      TimerCancelCallback? timerCancelCallback,
+      Duration? totalDurationVideo,
+      VideoPlayerValue? videoPlayerValueQuality,
+      bool isNotChangeQuality = true}) {
+    _flickVideoManager!._handleChangeVideo(videoPlayerController,
+        videoChangeDuration: videoChangeDuration,
+        timerCancelCallback: timerCancelCallback,
+        totalDurationVideo: totalDurationVideo,
+        videoPlayerValue: videoPlayerValueQuality,
+        isNotChangeQuality: isNotChangeQuality);
   }
 
   _handleToggleFullscreen() {

@@ -17,20 +17,12 @@ class FlickCurrentPosition extends StatelessWidget {
   Widget build(BuildContext context) {
     FlickVideoManager videoManager = Provider.of<FlickVideoManager>(context);
 
-    Duration? position = videoManager.videoPlayerValue?.position;
-
-    String? positionInSeconds = position != null
-        ? (position - Duration(minutes: position.inMinutes))
-            .inSeconds
-            .toString()
-            .padLeft(2, '0')
-        : null;
-
-    String textPosition =
-        position != null ? '${position.inMinutes}:$positionInSeconds' : '0:00';
-
     return Text(
-      textPosition,
+      videoManager.getDurationConvert(
+          position: !videoManager.isNotChangeQuality
+              ? videoManager.nextVideoAutoPlayDuration
+              : null,
+          durationDefault: videoManager.videoPlayerValue?.position),
       style: TextStyle(
         color: color,
         fontSize: fontSize,

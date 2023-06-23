@@ -124,6 +124,7 @@ class _FlickVideoWithControlsState extends State<FlickVideoWithControls> {
                     videoPlayerController: _videoPlayerController,
                     fit: widget.videoFit,
                     aspectRatioWhenLoading: widget.aspectRatioWhenLoading,
+
                   ),
                 ),
                 Positioned.fill(

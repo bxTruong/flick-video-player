@@ -15,8 +15,14 @@ class FlickVideoManager extends ChangeNotifier {
     if ((additionalOptions ?? []).isNotEmpty) {
       optionList.addAll(additionalOptions!);
     }
-    optionList.insert(0, OptionModel(icon: Icons.speed, name: 'Playback speed', onPressFeature: _onPressFeatureSpeed));
-    optionList.add(OptionModel(icon: Icons.clear, name: 'Cancel', onPressFeature: _onPressCancel));
+    optionList.insert(
+        0,
+        OptionModel(
+            icon: Icons.speed,
+            name: 'Playback speed',
+            onPressFeature: _onPressFeatureSpeed));
+    optionList.add(OptionModel(
+        icon: Icons.clear, name: 'Cancel', onPressFeature: _onPressCancel));
   }
 
   final FlickManager _flickManager;
@@ -31,6 +37,25 @@ class FlickVideoManager extends ChangeNotifier {
   bool _mounted = true;
   List<OptionModel> optionList = [];
   List<OptionModel>? additionalOptions;
+
+  bool _isNotChangeQuality = true;
+  Duration? totalDurationVideoQuality;
+  VideoPlayerValue? videoPlayerValueQuality;
+
+  String getDurationConvert({Duration? position, Duration? durationDefault}) {
+    position = position ?? durationDefault;
+
+    String? positionInSeconds = position != null
+        ? (position - Duration(minutes: position.inMinutes))
+            .inSeconds
+            .toString()
+            .padLeft(2, '0')
+        : null;
+
+    return position != null
+        ? '${position.inMinutes}:$positionInSeconds'
+        : '0:00';
+  }
 
   /// Auto-play the video after initialization.
   final bool autoPlay;
@@ -66,9 +91,12 @@ class FlickVideoManager extends ChangeNotifier {
   bool get errorInVideo => videoPlayerController?.value.hasError ?? false;
 
   /// Is current video initialized.
-  bool get isVideoInitialized => videoPlayerController?.value.isInitialized ?? false;
+  bool get isVideoInitialized =>
+      videoPlayerController?.value.isInitialized ?? false;
 
   bool get isPlaying => videoPlayerController?.value.isPlaying ?? false;
+
+  bool get isNotChangeQuality => _isNotChangeQuality;
 
   /// Cancel the current auto player timer with option of playing the next video directly.
   cancelVideoAutoPlayTimer({bool playNext = false}) {
@@ -90,25 +118,43 @@ class FlickVideoManager extends ChangeNotifier {
     _notify();
   }
 
-  _handleChangeVideo(VideoPlayerController newController, {Duration? videoChangeDuration, TimerCancelCallback? timerCancelCallback}) async {
-    // If videoChangeDuration is not null, start the autoPlayTimer.
-    if (videoChangeDuration != null) {
-      _timerCancelCallback = timerCancelCallback;
-      _videoChangeCallback = () {
-        _changeVideo(newController);
-        _nextVideoAutoPlayTimer = null;
-        _nextVideoAutoPlayDuration = null;
-        _videoChangeCallback = null;
-      };
+  _handleChangeVideo(VideoPlayerController newController,
+      {Duration? videoChangeDuration,
+      Duration? totalDurationVideo,
+      TimerCancelCallback? timerCancelCallback,
+        VideoPlayerValue? videoPlayerValue,
+      bool isNotChangeQuality = true}) async {
+    _nextVideoAutoPlayDuration = videoChangeDuration;
 
-      _nextVideoAutoPlayDuration = videoChangeDuration;
-
-      _nextVideoAutoPlayTimer = Timer(videoChangeDuration, _videoChangeCallback as void Function());
-      _notify();
-    } else {
-      // If videoChangeDuration is null, directly change the video.
-      _changeVideo(newController);
+    if (!isNotChangeQuality) {
+      if(totalDurationVideo == null) throw Exception('totalDurationVideo == null when isNotChangeQuality = false');
+      if(videoPlayerValue == null) throw Exception('videoPlayerValue == null when isNotChangeQuality = false');
+      totalDurationVideoQuality = totalDurationVideo;
+      videoPlayerValueQuality = videoPlayerValue;
+      _isNotChangeQuality = isNotChangeQuality;
     }
+
+    _notify();
+    _changeVideo(newController);
+
+    // // If videoChangeDuration is not null, start the autoPlayTimer.
+    // if (videoChangeDuration != null) {
+    //   _timerCancelCallback = timerCancelCallback;
+    //   _videoChangeCallback = () {
+    //     _changeVideo(newController);
+    //     _nextVideoAutoPlayTimer = null;
+    //     _nextVideoAutoPlayDuration = null;
+    //     _videoChangeCallback = null;
+    //   };
+    //
+    //
+    //   _nextVideoAutoPlayTimer =
+    //       Timer(videoChangeDuration, _videoChangeCallback as void Function());
+    //   _notify();
+    // } else {
+    //   // If videoChangeDuration is null, directly change the video.
+    //   _changeVideo(newController);
+    // }
   }
 
   // Immediately change the video.
@@ -134,18 +180,23 @@ class FlickVideoManager extends ChangeNotifier {
     if (!videoPlayerController!.value.isInitialized && autoInitialize) {
       try {
         await videoPlayerController!.initialize();
+        videoPlayerController
+            ?.seekTo(_nextVideoAutoPlayDuration ?? Duration(milliseconds: 0));
+        _nextVideoAutoPlayDuration = null;
+        _isNotChangeQuality = true;
+        _notify();
       } catch (err) {
         _flickManager._handleErrorInVideo();
       }
     }
 
-    // If movie already ended, restart the movie (Happens when previously used controller is
-    // used again).
-    if (videoPlayerController!.value.position == videoPlayerController!.value.duration) {
-      videoPlayerController!.seekTo(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
+    if (videoPlayerController!.value.position ==
+        videoPlayerController!.value.duration) {
+      videoPlayerController!
+          .seekTo(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
     }
 
-    if(_flickManager._context!=null) {
+    if (_flickManager._context != null) {
       if (autoPlay && ModalRoute.of(_flickManager._context!)!.isCurrent) {
         //Chrome's autoplay policies are simple:
         //Muted autoplay is always allowed.
@@ -189,7 +240,8 @@ class FlickVideoManager extends ChangeNotifier {
     _isBuffering = !isVideoEnded &&
         !videoPlayerValue!.hasError &&
         videoPlayerController!.value.buffered.isNotEmpty == true &&
-        videoPlayerController!.value.position.inSeconds >= videoPlayerController!.value.buffered[0].end.inSeconds;
+        videoPlayerController!.value.position.inSeconds >=
+            videoPlayerController!.value.buffered[0].end.inSeconds;
 
     _notify();
   }
@@ -225,8 +277,9 @@ class FlickVideoManager extends ChangeNotifier {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) =>
-          SpeedSheet(speedSelected: _videoPlayerController?.value.playbackSpeed ?? 1, videoPlayerController: _videoPlayerController),
+      builder: (context) => SpeedSheet(
+          speedSelected: _videoPlayerController?.value.playbackSpeed ?? 1,
+          videoPlayerController: _videoPlayerController),
     );
   }
 

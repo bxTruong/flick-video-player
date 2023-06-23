@@ -1,4 +1,6 @@
+import 'package:flick_video_player_custom/flick_video_player_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 /// Renders [VideoPlayer] with [BoxFit] configurations.
@@ -20,7 +22,7 @@ class FlickNativeVideoPlayer extends StatelessWidget {
 
     double? videoHeight = videoPlayerController?.value.size.height;
     double? videoWidth = videoPlayerController?.value.size.width;
-
+    bool isVideoReady = Provider.of<FlickVideoManager>(context).isNotChangeQuality;
     return LayoutBuilder(
       builder: (context, size) {
         double aspectRatio = (size.maxHeight == double.infinity ||
@@ -34,13 +36,14 @@ class FlickNativeVideoPlayer extends StatelessWidget {
           aspectRatio: aspectRatio,
           child: FittedBox(
             fit: fit!,
-            child: videoPlayerController?.value.isInitialized == true
-                ? Container(
-                    height: videoHeight,
-                    width: videoWidth,
-                    child: videoPlayer,
-                  )
-                : Container(),
+            child: Container(
+              height: videoHeight,
+              width: videoWidth,
+              child: videoPlayerController?.value.isInitialized == true &&
+                      isVideoReady
+                  ? videoPlayer
+                  : const CircularProgressIndicator(color: Colors.blue),
+            ),
           ),
         );
       },
