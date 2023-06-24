@@ -38,9 +38,9 @@ class FlickVideoManager extends ChangeNotifier {
   List<OptionModel> optionList = [];
   List<OptionModel>? additionalOptions;
 
-  bool _isNotChangeQuality = true;
-  Duration? totalDurationVideoQuality;
-  VideoPlayerValue? videoPlayerValueQuality;
+  bool _isKeepValueVideo = false;
+  Duration? totalDurationVideoKeep;
+  VideoPlayerValue? videoPlayerValueKeep;
 
   String getDurationConvert({Duration? position, Duration? durationDefault}) {
     position = position ?? durationDefault;
@@ -96,7 +96,9 @@ class FlickVideoManager extends ChangeNotifier {
 
   bool get isPlaying => videoPlayerController?.value.isPlaying ?? false;
 
-  bool get isNotChangeQuality => _isNotChangeQuality;
+  bool get isKeepValueVideo => _isKeepValueVideo;
+
+  Duration get totalDurationVide => videoPlayerValue?.duration ?? Duration();
 
   /// Cancel the current auto player timer with option of playing the next video directly.
   cancelVideoAutoPlayTimer({bool playNext = false}) {
@@ -120,18 +122,14 @@ class FlickVideoManager extends ChangeNotifier {
 
   _handleChangeVideo(VideoPlayerController newController,
       {Duration? videoChangeDuration,
-      Duration? totalDurationVideo,
       TimerCancelCallback? timerCancelCallback,
-        VideoPlayerValue? videoPlayerValue,
-      bool isNotChangeQuality = true}) async {
+      bool isKeepValueVideo = false}) async {
     _nextVideoAutoPlayDuration = videoChangeDuration;
 
-    if (!isNotChangeQuality) {
-      if(totalDurationVideo == null) throw Exception('totalDurationVideo == null when isNotChangeQuality = false');
-      if(videoPlayerValue == null) throw Exception('videoPlayerValue == null when isNotChangeQuality = false');
-      totalDurationVideoQuality = totalDurationVideo;
-      videoPlayerValueQuality = videoPlayerValue;
-      _isNotChangeQuality = isNotChangeQuality;
+    if (isKeepValueVideo) {
+      videoPlayerValueKeep = copyVideoPlayerValue(this.videoPlayerValue);
+      totalDurationVideoKeep = videoPlayerValueKeep?.duration;
+      _isKeepValueVideo = isKeepValueVideo;
     }
 
     _notify();
@@ -155,6 +153,28 @@ class FlickVideoManager extends ChangeNotifier {
     //   // If videoChangeDuration is null, directly change the video.
     //   _changeVideo(newController);
     // }
+  }
+
+  VideoPlayerValue? copyVideoPlayerValue(VideoPlayerValue? oldData) {
+    print('oldData != null ${oldData != null}');
+    return oldData != null
+        ? VideoPlayerValue(
+            duration: oldData.duration,
+            buffered: oldData.buffered,
+            caption: oldData.caption,
+            captionOffset: oldData.captionOffset,
+            errorDescription: oldData.errorDescription,
+            isBuffering: oldData.isBuffering,
+            isInitialized: oldData.isInitialized,
+            isLooping: oldData.isLooping,
+            isPlaying: oldData.isPlaying,
+            playbackSpeed: oldData.playbackSpeed,
+            position: oldData.position,
+            rotationCorrection: oldData.rotationCorrection,
+            size: oldData.size,
+            volume: oldData.volume,
+          )
+        : oldData;
   }
 
   // Immediately change the video.
@@ -183,7 +203,7 @@ class FlickVideoManager extends ChangeNotifier {
         videoPlayerController
             ?.seekTo(_nextVideoAutoPlayDuration ?? Duration(milliseconds: 0));
         _nextVideoAutoPlayDuration = null;
-        _isNotChangeQuality = true;
+        _isKeepValueVideo = false;
         _notify();
       } catch (err) {
         _flickManager._handleErrorInVideo();

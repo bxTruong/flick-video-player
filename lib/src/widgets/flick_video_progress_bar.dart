@@ -25,11 +25,13 @@ class FlickVideoProgressBar extends StatelessWidget {
     FlickControlManager controlManager =
         Provider.of<FlickControlManager>(context);
     FlickVideoManager videoManager = Provider.of<FlickVideoManager>(context);
-    VideoPlayerValue? videoPlayerValue = videoManager.videoPlayerValue;
+    VideoPlayerValue? videoPlayerValue = videoManager.isKeepValueVideo
+        ? videoManager.videoPlayerValueKeep
+        : videoManager.videoPlayerValue;
 
     if (videoPlayerValue == null) return Container();
 
-    void  seekToRelativePosition(Offset globalPosition) {
+    void seekToRelativePosition(Offset globalPosition) {
       final box = context.findRenderObject() as RenderBox;
       final Offset tapPos = box.globalToLocal(globalPosition);
       final double relative = tapPos.dx / box.size.width;
