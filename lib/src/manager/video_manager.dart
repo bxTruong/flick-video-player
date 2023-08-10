@@ -122,13 +122,17 @@ class FlickVideoManager extends ChangeNotifier {
       {Duration? videoChangeDuration,
       Duration? totalDurationVideo,
       TimerCancelCallback? timerCancelCallback,
-        VideoPlayerValue? videoPlayerValue,
+      VideoPlayerValue? videoPlayerValue,
       bool isNotChangeQuality = true}) async {
     _nextVideoAutoPlayDuration = videoChangeDuration;
 
     if (!isNotChangeQuality) {
-      if(totalDurationVideo == null) throw Exception('totalDurationVideo == null when isNotChangeQuality = false');
-      if(videoPlayerValue == null) throw Exception('videoPlayerValue == null when isNotChangeQuality = false');
+      if (totalDurationVideo == null)
+        throw Exception(
+            'totalDurationVideo == null when isNotChangeQuality = false');
+      if (videoPlayerValue == null)
+        throw Exception(
+            'videoPlayerValue == null when isNotChangeQuality = false');
       totalDurationVideoQuality = totalDurationVideo;
       videoPlayerValueQuality = videoPlayerValue;
       _isNotChangeQuality = isNotChangeQuality;
@@ -254,9 +258,11 @@ class FlickVideoManager extends ChangeNotifier {
   }
 
   _notify() {
-    if (_mounted) {
-      notifyListeners();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((__) {
+      if (_mounted) {
+        notifyListeners();
+      }
+    });
   }
 
   @override

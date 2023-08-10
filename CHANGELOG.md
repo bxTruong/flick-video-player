@@ -94,5 +94,9 @@ Fix don't show setting when full screen
 
 Change full screen
 
+## 0.5.7
+
+Fix WidgetsBinding.instance.addPostFrameCallback
+
 
 
