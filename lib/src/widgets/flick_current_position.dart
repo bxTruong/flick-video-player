@@ -19,7 +19,7 @@ class FlickCurrentPosition extends StatelessWidget {
 
     return Text(
       videoManager.getDurationConvert(
-          position: !videoManager.isNotChangeQuality
+          position: videoManager.isKeepValueVideo
               ? videoManager.nextVideoAutoPlayDuration
               : null,
           durationDefault: videoManager.videoPlayerValue?.position),

@@ -19,9 +19,9 @@ class FlickTotalDuration extends StatelessWidget {
 
     return Text(
       videoManager.getDurationConvert(
-          position: !videoManager.isNotChangeQuality
-              ? videoManager.totalDurationVideoQuality
-              :  videoManager.videoPlayerValue?.duration,
+          position: videoManager.isKeepValueVideo
+              ? videoManager.totalDurationVideoKeep
+              : videoManager.videoPlayerValue?.duration,
           durationDefault: videoManager.videoPlayerValue?.duration),
       style: TextStyle(
         fontSize: fontSize,

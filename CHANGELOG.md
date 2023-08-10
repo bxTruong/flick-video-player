@@ -96,6 +96,10 @@ Change full screen
 
 ## 0.5.7
 
+Fix handleChangeVideo, change source when full screen or not
+
+## 0.5.8
+
 Fix WidgetsBinding.instance.addPostFrameCallback
 
 

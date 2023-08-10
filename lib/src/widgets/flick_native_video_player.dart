@@ -22,7 +22,8 @@ class FlickNativeVideoPlayer extends StatelessWidget {
 
     double? videoHeight = videoPlayerController?.value.size.height;
     double? videoWidth = videoPlayerController?.value.size.width;
-    bool isVideoReady = Provider.of<FlickVideoManager>(context).isNotChangeQuality;
+    bool isKeepValueVideo =
+        Provider.of<FlickVideoManager>(context).isKeepValueVideo;
     return LayoutBuilder(
       builder: (context, size) {
         double aspectRatio = (size.maxHeight == double.infinity ||
@@ -40,9 +41,9 @@ class FlickNativeVideoPlayer extends StatelessWidget {
               height: videoHeight,
               width: videoWidth,
               child: videoPlayerController?.value.isInitialized == true &&
-                      isVideoReady
+                      !isKeepValueVideo
                   ? videoPlayer
-                  : const CircularProgressIndicator(color: Colors.blue),
+                  : Center(child: Transform.scale(scale: 2.5,child: const CircularProgressIndicator(color: Colors.blue))),
             ),
           ),
         );

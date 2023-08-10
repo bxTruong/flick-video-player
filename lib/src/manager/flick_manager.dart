@@ -85,15 +85,11 @@ class FlickManager {
   handleChangeVideo(VideoPlayerController videoPlayerController,
       {Duration? videoChangeDuration,
       TimerCancelCallback? timerCancelCallback,
-      Duration? totalDurationVideo,
-      VideoPlayerValue? videoPlayerValueQuality,
-      bool isNotChangeQuality = true}) {
+      bool isKeepValueVideo = true}) {
     _flickVideoManager!._handleChangeVideo(videoPlayerController,
         videoChangeDuration: videoChangeDuration,
         timerCancelCallback: timerCancelCallback,
-        totalDurationVideo: totalDurationVideo,
-        videoPlayerValue: videoPlayerValueQuality,
-        isNotChangeQuality: isNotChangeQuality);
+        isKeepValueVideo: isKeepValueVideo);
   }
 
   _handleToggleFullscreen() {

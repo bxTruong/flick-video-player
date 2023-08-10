@@ -95,19 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Duration currentPosition = await flickManager1
             .flickVideoManager?.videoPlayerController?.position ??
         const Duration(milliseconds: 0);
-    Duration? totalDurationVideo =
-        flickManager1.flickVideoManager?.videoPlayerValue?.duration;
-    print('ghghghghghghghghgh $totalDurationVideo');
     VideoPlayerController videoPlayerController = VideoPlayerController.network(
         "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
 
     flickManager1.handleChangeVideo(videoPlayerController,
-        videoChangeDuration: currentPosition,
-        totalDurationVideo: totalDurationVideo,
-        videoPlayerValueQuality:  flickManager1.flickVideoManager?.videoPlayerValue,
-        isNotChangeQuality: false);
-    // await Future.delayed(Duration(milliseconds: 800));
-    // await flickManager1.flickControlManager?.seekTo(duration);
+        videoChangeDuration: currentPosition, isKeepValueVideo: true);
+
     flickManager1.flickControlManager?.togglePlay();
   }
 }
